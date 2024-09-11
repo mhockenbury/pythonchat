@@ -1,0 +1,21 @@
+{% extends "chatinterface/base.html" %}
+
+{% block content %}
+<p>Logged in as: {{ user }}</p>
+{% if chat_messages %}
+    <ul>
+    {% for message in chat_messages %}
+        <li>{{message.author.username}}: {{message.content}} <i>{{message.created_at}}</i></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No messages are available.</p>
+{% endif %}
+<div>
+<form id="ChatForm" action="{%url 'index' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Send">
+</form>
+</div>
+{% endblock content %}
