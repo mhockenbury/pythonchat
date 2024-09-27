@@ -23,7 +23,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
 
-        # perist messages to DB
+        # persist messages to DB
         chat_message: ChatMessage = await self.persist_message(message)
 
         await self.channel_layer.group_send(
