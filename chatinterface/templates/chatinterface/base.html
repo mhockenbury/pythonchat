@@ -6,6 +6,9 @@
 <body>
     {% block content %}{% endblock %}
 </body>
+<template id="messagetemplate">
+    <li><span class="author"></span> <span class="content"></span> <i class="timestamp"></i></li>
+</template>
 <script>
     const chatSocket = new WebSocket(
         'ws://'
@@ -15,23 +18,26 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        console.log(data)
-        let chatList = document.getElementById('chat-log');
-        let message = document.createElement('li');
-        message.appendChild(document.createTextNode(`${data.author.username}: ${data.content} <i>${data.created_at}</i>`));
+
+        const template = document.querySelector("#messagetemplate")
+        const message = template.content.cloneNode(true);
+
+        const author = message.querySelector(".author")
+        author.textContent = data.author
+
+        const content = message.querySelector(".content")
+        content.textContent = data.content
+
+        const timestamp = message.querySelector(".timestamp")
+        timestamp.textContent = data.created_at
+
+        const chatList = document.getElementById('chat-log');
         chatList.appendChild(message);
     };
 
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
-
-    document.querySelector('#id_chat_message').focus();
-/*     document.querySelector('#id_chat_message').onkeyup = function(e) {
-        if (e.key === 'Enter') {  // enter, return
-            document.querySelector('#chat-send').click();
-        }
-    }; */
 
     document.querySelector('#chat-send').onclick = function(e) {
         e.preventDefault();
