@@ -6,4 +6,41 @@
 <body>
     {% block content %}{% endblock %}
 </body>
+<script>
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        console.log(data)
+        let chatList = document.getElementById('chat-log');
+        let message = document.createElement('li');
+        message.appendChild(document.createTextNode(`${data.author.username}: ${data.content} <i>${data.created_at}</i>`));
+        chatList.appendChild(message);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#id_chat_message').focus();
+/*     document.querySelector('#id_chat_message').onkeyup = function(e) {
+        if (e.key === 'Enter') {  // enter, return
+            document.querySelector('#chat-send').click();
+        }
+    }; */
+
+    document.querySelector('#chat-send').onclick = function(e) {
+        e.preventDefault();
+        const messageInputDom = document.querySelector('#id_chat_message');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
+    };
+</script>
 </html>

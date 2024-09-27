@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
     'chatinterface.apps.ChatinterfaceConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,7 +71,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pythonchat.wsgi.application'
-
+ASGI_APPLICATION = 'pythonchat.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)]
+        }
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
