@@ -2,6 +2,7 @@
 
 {% block content %}
 <p>Logged in as: {{ user }}</p>
+<div id="chat-window">
 {% if chat_messages %}
     <ul id="chat-log">
     {% for message in chat_messages %}
@@ -11,6 +12,7 @@
 {% else %}
     <p>No messages are available.</p>
 {% endif %}
+</div>
 <div>
 <form id="ChatForm" action="{%url 'index' %}" method="POST">
     {% csrf_token %}

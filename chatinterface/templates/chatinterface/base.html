@@ -2,12 +2,18 @@
 <html>
 <head>
     <title>Site Title</title>
+    <style>
+        #chat-window {
+            height: 300px;
+            overflow: auto;
+        }
+    </style>
 </head>
 <body>
     {% block content %}{% endblock %}
 </body>
 <template id="messagetemplate">
-    <li><span class="author"></span> <span class="content"></span> <i class="timestamp"></i></li>
+    <li><span class="author"></span>: <span class="content"></span> <i class="timestamp"></i></li>
 </template>
 <script>
     const chatSocket = new WebSocket(
@@ -33,6 +39,8 @@
 
         const chatList = document.getElementById('chat-log');
         chatList.appendChild(message);
+        const chatWindow = document.getElementById('chat-window');
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     };
 
     chatSocket.onclose = function(e) {
